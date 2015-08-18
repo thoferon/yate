@@ -10,6 +10,27 @@ import Test.Hspec
 import Text.Yate.Parser.Internal
 import Text.Yate.Types
 
+testTemplate :: Template YateValue
+testTemplate = Parts
+  [ Content "Items owned by "
+  , Variable $ AbsolutePath ["user", "name"]
+  , Content ":"
+  , For "_element" (AbsolutePath ["user", "items"])
+        (In (AbsolutePath ["_element"])
+            (Parts
+               [ Variable $ RelativePath ["description"]
+               , Content " "
+               , If (RelativePath ["value"])
+                    (Parts
+                       [ Content "("
+                       , Variable $ RelativePath ["value"]
+                       , Content ")"
+                       ])
+                    (Content "")
+               ]))
+  , Content "End of list."
+  ]
+
 spec :: Spec
 spec = describe "Parser" $ do
   describe "leftDelimiterParser" $ do
@@ -84,23 +105,4 @@ spec = describe "Parser" $ do
                     \{% if .value %}({%= .value %}){% end %}\
                     \{% end %}\
                     \End of list."
-          result = Parts
-            [ Content "Items owned by "
-            , Variable $ AbsolutePath ["user", "name"]
-            , Content ":"
-            , For "_element" (AbsolutePath ["user", "items"])
-                  (In (AbsolutePath ["_element"])
-                      (Parts
-                         [ Variable $ RelativePath ["description"]
-                         , Content " "
-                         , If (RelativePath ["value"])
-                              (Parts
-                                 [ Content "("
-                                 , Variable $ RelativePath ["value"]
-                                 , Content ")"
-                                 ])
-                              (Content "")
-                         ]))
-            , Content "End of list."
-            ]
-      parseOnly (templateParser "{%" "%}") content `shouldBe` Right result
+      parseOnly (templateParser "{%" "%}") content `shouldBe` Right testTemplate

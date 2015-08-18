@@ -19,7 +19,13 @@ import qualified Data.Vector         as V
 data Path
   = AbsolutePath [T.Text] -- ^ e.g. @thing.stuff@
   | RelativePath [T.Text] -- ^ e.g. @.stuff@ (see @in@ and @forall@ statements)
-  deriving (Show, Eq)
+  deriving (Eq)
+
+-- For error messages
+instance Show Path where
+  show path = case path of
+    AbsolutePath names ->       T.unpack (T.intercalate "." names)
+    RelativePath names -> '.' : T.unpack (T.intercalate "." names)
 
 -- | Template which needs a given type of input data
 data Template a
@@ -46,6 +52,9 @@ class ToYate a where
 
 instance ToYate YateValue where
   toYate = id
+
+instance ToYate () where
+  toYate () = Object $ M.empty
 
 #ifndef NoAeson
 instance ToYate A.Value where
