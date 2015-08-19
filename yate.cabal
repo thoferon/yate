@@ -29,6 +29,7 @@ library
                        Text.Yate.Engine.Internal
                        Text.Yate.Parser
                        Text.Yate.Parser.Internal
+                       Text.Yate.TH
                        Text.Yate.Types
 
   if flag(NoAeson)
@@ -40,6 +41,7 @@ library
                      , text
                      , unordered-containers
                      , vector
+                     , template-haskell >=2.9
   else
     build-depends:     base >=4.7 && <4.8
                      , attoparsec >=0.12.0.0
@@ -47,6 +49,7 @@ library
                      , text
                      , unordered-containers
                      , vector
+                     , template-haskell >=2.9
                      , aeson
                      , scientific
 
