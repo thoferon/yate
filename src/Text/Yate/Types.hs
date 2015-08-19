@@ -8,6 +8,7 @@ module Text.Yate.Types
   ) where
 
 #ifndef NoAeson
+import           Data.Scientific     (toRealFloat)
 import qualified Data.Aeson          as A
 #endif
 import qualified Data.HashMap.Strict as M

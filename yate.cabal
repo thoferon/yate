@@ -48,6 +48,7 @@ library
                      , unordered-containers
                      , vector
                      , aeson
+                     , scientific
 
 test-suite unit
   type:                exitcode-stdio-1.0
