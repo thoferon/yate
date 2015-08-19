@@ -108,8 +108,8 @@ spec = describe "Parser" $ do
     it "doesn't get confused with thinkgs starting like a\
        \ delimiter in the middle of some content" $ do
       let result = Parts
-            [Content "\begin{document}\n", Variable $ AbsolutePath ["x"]]
-      parseOnly (templateParser "{%" "%}") "\begin{document}\n{%= x %}"
+            [Content "\\begin{document}\n", Variable $ AbsolutePath ["x"]]
+      parseOnly (templateParser "{%" "%}") "\\begin{document}\n{%= x %}"
         `shouldBe` Right result
 
     it "integrates all the subparsers together" $ do
