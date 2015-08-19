@@ -12,7 +12,7 @@ import           Text.Yate.TH
 import           Text.Yate.Types
 
 template :: Template YateValue
-template = [tpl|Hello, {%= name %}!|]
+template = [ytpl|Hello, {%= name %}!|]
 
 spec :: Spec
 spec = describe "Template Haskell" $ do

@@ -1,8 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Text.Yate.TH
-  ( tpl
-  , tplf
+  ( ytpl
+  , ytplf
   , loadTemplate
   , loadTemplateFile
   ) where
@@ -16,16 +16,16 @@ import           Language.Haskell.TH.Quote
 import           Text.Yate.Parser
 import           Text.Yate.Types
 
-tpl :: QuasiQuoter
-tpl = QuasiQuoter
+ytpl :: QuasiQuoter
+ytpl = QuasiQuoter
   { quoteExp  = loadTemplate
   , quotePat  = error "The tpl quasiquoter is only for expressions"
   , quoteType = error "The tpl quasiquoter is only for expressions"
   , quoteDec  = error "The tpl quasiquoter is only for expressions"
   }
 
-tplf :: QuasiQuoter
-tplf = quoteFile tpl
+ytplf :: QuasiQuoter
+ytplf = quoteFile ytpl
 
 loadTemplate :: String -> Q Exp
 loadTemplate str = case parseTemplate $ T.pack str of
