@@ -39,6 +39,7 @@ Items owned by {%= author.name %}:
 
 ## Main.hs
 
+```
 {-# LANGUAGE TemplateHaskell #-}
 
 import           Data.Aeson
@@ -55,12 +56,15 @@ main = do
   Just  dat   <- decode jsonContent
   Right out   <- renderTemplate template dat
   putStrLn out
+```
 
 ## Output
 
+```
 Items owned by Tom:
 * Item 1 (11.99)
 * Item 2
+```
 
 # Syntax
 
@@ -137,4 +141,4 @@ Characters allowed in names are alphanumeric characters as well as
 
 # API Documentation
 
-See https://hackage.haskell.org/package/yate for more information.
+See <https://hackage.haskell.org/package/yate> for more information.
