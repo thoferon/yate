@@ -9,8 +9,8 @@ module Text.Yate.Parser.Internal
   , inParser
   , contentParser
   ) where
-
-import           Prelude hiding (takeWhile)
+import Debug.Trace
+import           Prelude hiding (take, takeWhile)
 
 import           Control.Applicative
 import           Control.Monad
@@ -117,12 +117,14 @@ inParser l r = do
 contentParser :: T.Text -> T.Text -> Parser (Template a)
 contentParser l r = do
   when (T.length l == 0) $ fail "invalid zero-length left delimiter"
-  txt <- (TL.fromChunks . pure) <$> takeTill (== T.head l)
-  when (TL.length txt == 0) empty
-  let done = do
-        lookAhead (void $ string l) <|> endOfInput
-        return $ Content txt
-      more = do
-        Content txt' <- contentParser l r
-        return $ Content $ txt <> txt'
-  done <|> more
+
+  txt <- TL.fromStrict <$> takeTill (== T.head l)
+  txt' <- if TL.null txt
+    then do
+      isDelim <- lookAhead $ (void (string l) >> return True) <|> return False
+      when isDelim empty
+      TL.fromStrict <$> take 1
+    else return txt
+
+  Content txt'' <- option (Content "") $ contentParser l r
+  return $ Content $ txt' <> txt''

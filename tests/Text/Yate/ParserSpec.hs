@@ -98,6 +98,12 @@ spec = describe "Parser" $ do
       parseOnly (contentParser "" ")") "content" `shouldSatisfy` isLeft
 
   describe "templateParser" $ do
+    it "doesn't get confused with things starting like a delimiter" $ do
+      let result = Parts
+            [Content "\\item{", Variable $ AbsolutePath ["x"], Content "}"]
+      parseOnly (templateParser "{%" "%}") "\\item{{%= x %}}"
+        `shouldBe` Right result
+
     it "integrates all the subparsers together" $ do
       let content = "Items owned by {%= user.name %}:\
                     \{% forall user.items %}\
