@@ -57,6 +57,24 @@ instance ToYate YateValue where
 instance ToYate () where
   toYate () = Object $ M.empty
 
+instance ToYate a => ToYate (V.Vector a) where
+  toYate = List . fmap toYate
+
+instance ToYate a => ToYate [a] where
+  toYate = toYate . V.fromList
+
+instance ToYate T.Text where
+  toYate = String
+
+instance ToYate Double where
+  toYate = Number
+
+instance ToYate Bool where
+  toYate = Bool
+
+instance ToYate a => ToYate (Maybe a) where
+  toYate = maybe Null toYate
+
 #ifndef NoAeson
 instance ToYate A.Value where
   toYate x = case x of
