@@ -13,6 +13,11 @@ category:              Text
 build-type:            Simple
 cabal-version:         >=1.10
 
+source-repository head
+  type:              darcs
+  location:          http://hub.darcs.net/thoferon/yate
+  tag:               0.1.0.0
+
 flag NoAeson
   description:         Set this flag if you don't want to build aeson
   default:             False
