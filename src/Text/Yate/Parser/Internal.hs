@@ -9,7 +9,7 @@ module Text.Yate.Parser.Internal
   , inParser
   , contentParser
   ) where
-import Debug.Trace
+
 import           Prelude hiding (take, takeWhile)
 
 import           Control.Applicative
@@ -119,12 +119,13 @@ contentParser l r = do
   when (T.length l == 0) $ fail "invalid zero-length left delimiter"
 
   txt <- TL.fromStrict <$> takeTill (== T.head l)
-  txt' <- if TL.null txt
+  if TL.null txt
     then do
       isDelim <- lookAhead $ (void (string l) >> return True) <|> return False
       when isDelim empty
-      TL.fromStrict <$> take 1
-    else return txt
-
-  Content txt'' <- option (Content "") $ contentParser l r
-  return $ Content $ txt' <> txt''
+      txt' <- TL.fromStrict <$> take 1
+      Content txt'' <- option (Content "") $ contentParser l r
+      return $ Content $ txt' <> txt''
+    else do
+      Content txt' <- option (Content "") $ contentParser l r
+      return $ Content $ txt <> txt'

@@ -98,10 +98,18 @@ spec = describe "Parser" $ do
       parseOnly (contentParser "" ")") "content" `shouldSatisfy` isLeft
 
   describe "templateParser" $ do
-    it "doesn't get confused with things starting like a delimiter" $ do
+    it "doesn't get confused with things starting like a\
+       \ delimiter before one" $ do
       let result = Parts
             [Content "\\item{", Variable $ AbsolutePath ["x"], Content "}"]
       parseOnly (templateParser "{%" "%}") "\\item{{%= x %}}"
+        `shouldBe` Right result
+
+    it "doesn't get confused with thinkgs starting like a\
+       \ delimiter in the middle of some content" $ do
+      let result = Parts
+            [Content "\begin{document}\n", Variable $ AbsolutePath ["x"]]
+      parseOnly (templateParser "{%" "%}") "\begin{document}\n{%= x %}"
         `shouldBe` Right result
 
     it "integrates all the subparsers together" $ do
